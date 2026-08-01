@@ -64,6 +64,21 @@ jobs:
           CMD ["python", "app.py"]
           DOCKEREOF
 
+          # 配置 Docker 镜像加速（国内服务器必须，否则 docker pull 超时）
+          if [ ! -f /etc/docker/daemon.json ]; then
+            mkdir -p /etc/docker
+            cat > /etc/docker/daemon.json << 'MIRROREOF'
+          {
+            "registry-mirrors": [
+              "https://docker.1ms.run",
+              "https://docker.xuanyuan.me"
+            ]
+          }
+          MIRROREOF
+            systemctl restart docker || service docker restart
+            sleep 3
+          fi
+
           # 构建镜像
           docker build --build-arg PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple -t "$APP":latest .
 
