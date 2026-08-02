@@ -4,34 +4,34 @@
 
 ---
 
-## 2026-08-02 · 本地开发 + CI 自检通过（本次会话）
+## 2026-08-02 · 全链路跑通 ✅（本次会话）
 
 ### 当前阶段
 
-六步流程第 **⑤** 步：触发 PR（待 push + gh pr create）
+六步流程第 **⑥** 步 — **已完成!** 全链路 `①→②→③→④→⑤→⑥` 跑通。
+
+### 部署结果
+
+| 项目 | 值 |
+|---|---|
+| ⚠️ **实际主机端口** | **8008** |
+| 容器内端口 | 8003 |
+| 端口回落原因 | 8003 被占用,CD 脚本自动在 8003-8020 区间回退 |
+| 健康检查 | `http://172.16.0.7:8008/health` ✅ |
+| 服务地址 | `http://<SSH_HOST>:8008` |
 
 ### 已完成
 
-- [x] `standards/00-project-context.md` — 技术栈: Python 3.11 / Flask / pytest / ruff / Docker, 端口 8003
-- [x] `standards/01-requirements.md` — 4 条用户故事 US-1~US-4, 每条带验收标准
-- [x] Step ②: 从 main 切出 `feature/1-hello-api`, rebase 到最新 main
-- [x] Step ③: 代码文件验证通过:
-  - `app.py` — Flask 入口, `GET /` + `GET /health`, 端口 8003
-  - `test_app.py` — 7 条测试(含边界 404)
-  - `requirements.txt` / `requirements-dev.txt` — 生产与开发依赖拆分
-  - `Dockerfile` — Python 3.11-slim, 支持 `PIP_INDEX_URL` 镜像源参数
-  - `.github/workflows/ci.yml` — PR 触发 ruff + pytest + cov + docker build
-  - `.github/workflows/cd.yml` — push main 触发 SSH 部署 + Docker 镜像加速 + 端口回退 + 健康检查
-  - `.gitignore` / `README.md`
-- [x] Step ④: 本地 CI 自检**全绿**:
-  - `ruff format --check .` — 15 files already formatted ✅
-  - `ruff check .` — All checks passed ✅
-  - `pytest --cov=. --cov-fail-under=80` — 7 passed, 98% 覆盖率 ✅
+- [x] Step ①: 仓库与 Secrets 已配置
+- [x] Step ②: `feature/1-hello-api` → rebase main → push
+- [x] Step ③: 代码文件验证通过(app.py / test_app.py / CI/CD / Dockerfile / README)
+- [x] Step ④: 本地 CI 自检全绿(ruff ✅ ruff check ✅ pytest 7/7 98% ✅)
+- [x] Step ⑤: PR #4 创建 + CI 绿灯 ✅
+- [x] Step ⑥: 人工 Merge → CD 自动部署 → `/health` 通过 → **部署端口 8008** ✅
 
 ### 下一步 TODO
 
-- [ ] Step ⑤: push + `gh pr create`, 等 CI 绿灯
-- [ ] Step ⑥: ✋ 人工 Review + Merge → CD 自动部署 → 验证 `/health`
+- 无(US-1~US-4 全部完成)
 
 ---
 
